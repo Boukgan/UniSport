@@ -1,0 +1,24 @@
+# Database config — never push credentials
+includes/db_connection.php
+
+# Composer (if used later)
+/vendor/
+composer.lock
+
+# Uploaded user files
+uploads/facilities/*
+uploads/profile/*
+!uploads/facilities/.gitkeep
+!uploads/profile/.gitkeep
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE folders
+.vscode/
+.idea/
+
+# Sensitive config
+.env
