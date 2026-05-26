@@ -24,7 +24,8 @@
     inp?.addEventListener('input',()=>paint(score(inp.value)));
 
     // Department auto-detect from matric
-    const facMap={'01':'FKE','02':'FKEKK','03':'FTMK','04':'FKM','05':'FKP','06':'FPTT','07':'FTK','08':'FTKEE','09':'FTKMP'};
+    const facMap={'01':'FKE','02':'FKEKK','03':'FTMK','04':'FKM','05':'FKP',
+        '06':'FPTT','07':'FTK','08':'FTKEE','09':'FTKMP'};
         matric?.addEventListener('input',()=>{
             const v=matric.value.toUpperCase();
             const code=v.substr(1,2);
