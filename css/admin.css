@@ -1,0 +1,81 @@
+.admin-tabs{
+    display:flex;
+    gap:0;
+    border-bottom:2px solid var(--border);
+    margin-bottom:24px;
+    flex-wrap:wrap
+}
+
+.admin-tabs{
+    padding:10px 20px;
+    font-size:14px;
+    cursor:pointer;
+    font-weight:600;
+    border-bottom:2px solid transparent;
+    margin-bottom:-2px;
+    color:var(--muted);
+    text-decoration: none
+}
+
+.admin-tabs.active{
+    color:var(--navy);
+    border-bottom-color:var(--navy)
+}
+
+.admin-tabs.hover{
+    color:var(--navy)
+}
+
+.slot-status-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap: 10px;
+}
+
+
+.slot-status-grid .slot-row{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    border:1px solid var(--border);
+    border-radius:var(--btn-radius);
+    padding:8px 10px;
+    background:var(--off)
+}
+
+.slot-status-grid .slot-row span{
+    font-size: 12px;
+    font-weight: 600;
+    flex:1;
+}
+
+.slot-status-grid select{
+    flex:1;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:5px 8px;
+    font-size: 12px;
+    background:var(--white);
+    color:var(--navy)
+}
+
+/*================================================
+   DARK MODE - admin.css overrides
+=================================================*/
+
+html[data-theme="dark"] .slot-status-grid .slot-row{
+    background: #101827;
+    border-color: #2a3a5a;
+    color: #e6edf7;
+}
+
+html[data-theme="dark"] .slot-status-grid span{
+    color: #e6edf7;
+}
+
+html[data-theme="dark"] .slot-status-grid select{
+    background: #1a2438;
+    color: #e6edf7;
+    border-color: #2a3a5a;
+}
+
