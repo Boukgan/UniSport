@@ -1,0 +1,28 @@
+.filter-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+    align-items: center
+}
+
+.filter-bar input,.filter-bar select{
+    border:1px solid var(--border);
+    border-radius: var(--btn-r);
+    padding:9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size:13px;
+    outline:none;
+    background:var(--white);
+    color:var(--navy)
+}
+
+.filter-bar input:focus,.filter-bar select:focus{
+    border-color:var(--navy);
+}
+
+.filter-bar input[type="search"]{
+    min-width:240px;
+    flex:1;
+    max-width: 360px
+}
