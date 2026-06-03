@@ -123,7 +123,7 @@ require __DIR__.'/includes/header.php';
         <div class="form-row">
           <label>UTeM Email</label>
           <input type="email" name="email" id="emailInput" required
-                 placeholder="e.g. d032410091@student.utem.edu.my"
+                 placeholder="e.g. b032410001@student.utem.edu.my"
                  value="<?= e($_POST['email'] ?? '') ?>">
         </div>
         <button class="btn btn-primary btn-block" id="submitBtn" type="submit">
