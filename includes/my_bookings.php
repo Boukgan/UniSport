@@ -44,7 +44,7 @@ function render_row($r){
     echo '<td><a class="btn btn-outline btn-sm" href="'.base_url('reservation_summary.php?id='.$r['reservation_id']).'"
     >View</a> ';
     if($can_cancel) {
-        echo '<form method="post" style="display:inlgiine" onsubmit="return confirm(\'Cancel this
+        echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Cancel this
     reservation?\')">';
     echo '<input type="hidden" name="action" value="cancel"><input type="hidden"
     name="reservation_id" value="'.$r['reservation_id'].'">';
