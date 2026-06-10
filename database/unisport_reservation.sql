@@ -119,8 +119,7 @@ INSERT INTO notifications (user_id, title, message) VALUES
 (2, 'Reservation submitted', 'Your reservation #1 is awaiting approval.'),
 (3, 'Reservation completed', 'Thanks for using UniSport!');
 
--- ==========================================
--- v6 migration: prevent concurrent double-booking at the DB level
--- ==========================================
+-- prevent concurrent double-booking at the DB level
+
 ALTER TABLE reservations
   ADD UNIQUE KEY uniq_booking (facility_id, booking_date, start_time);
