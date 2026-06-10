@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/db_connection.php';
 
 function notify($conn, $user_id, $title, $message = null) {
