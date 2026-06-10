@@ -1,9 +1,9 @@
 -- UniSport Facility Reservation System (full schema + v6 migration)
 -- Import in phpMyAdmin to create or reset the database.
 
-CREATE DATABASE IF NOT EXISTS facility_reservation
+CREATE DATABASE IF NOT EXISTS unisport_reservation
   DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE facility_reservation;
+USE unisport_reservation;
 
 DROP TABLE IF EXISTS password_reset_tokens;
 DROP TABLE IF EXISTS notifications;
@@ -86,8 +86,7 @@ CREATE TABLE password_reset_tokens (
 -- ===== Sample users (password = "password123") =====
 INSERT INTO users (full_name, matric_number, email, phone, department, password, role) VALUES
 ('System Admin',  NULL,        'admin@utem.edu.my',             '0123456789','Sports Centre','$2b$10$RvKvQ0vCdGWEWP6Ossire.1Qr1r/1OEtKwiqKDoS0L29nt3b4MVLO','admin'),
-('Ahmad Faiz',    'D032410091','d032410091@student.utem.edu.my','0111111111','FTMK',         '$2b$10$RvKvQ0vCdGWEWP6Ossire.1Qr1r/1OEtKwiqKDoS0L29nt3b4MVLO','user'),
-('Siti Nurul',    'D012410456','d012410456@student.utem.edu.my','0122222222','FKE',          '$2b$10$RvKvQ0vCdGWEWP6Ossire.1Qr1r/1OEtKwiqKDoS0L29nt3b4MVLO','user'),
+('Ahmad Bukhari',    'D032410091','d032410091@student.utem.edu.my','0111111111','FTMK',         '$2b$10$RvKvQ0vCdGWEWP6Ossire.1Qr1r/1OEtKwiqKDoS0L29nt3b4MVLO','user'),
 ('Dr. Rahman',    NULL,        'rahman@utem.edu.my',            '0133333333','Sports Centre','$2b$10$RvKvQ0vCdGWEWP6Ossire.1Qr1r/1OEtKwiqKDoS0L29nt3b4MVLO','staff');
 
 -- ===== Sample facilities =====
