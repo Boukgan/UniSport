@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/session.php';
 require_once __DIR__ . '/db_connection.php';
-require_once __DIR__ . '/notification.php';
+require_once __DIR__ . '/notifications.php';
 
 function role_from_email($email) {
     $email = strtolower (trim($email));
