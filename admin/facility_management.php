@@ -289,7 +289,7 @@ require __DIR__ . '/../includes/header.php';
   <div class="page-header">
     <div><h1>Facility Management</h1><p>Add, edit and manage facilities and individual time slots.</p></div>
   </div>
-  <?php require __DIR__ . '/_tabs.php'; ?>
+  <?php require __DIR__ . '/tabs.php'; ?>
 
   <?php if ($flashSuccess): ?>
     <div class="auth-ok" style="margin-bottom:16px"><?= e($flashSuccess) ?></div>

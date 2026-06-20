@@ -47,7 +47,7 @@ require __DIR__.'/../includes/header.php';
 ?>
 <main class="page-wrap"><div class="container">
   <div class="page-header"><div><h1>Reservation Validation</h1><p>Approve or reject pending reservations.</p></div></div>
-  <?php require __DIR__.'/_tabs.php'; ?>
+  <?php require __DIR__.'/tabs.php'; ?>
   <?php if (!$pending): ?>
     <div class="empty"><div class="empty-icon">✅</div>No pending reservations.</div>
   <?php else: ?>
