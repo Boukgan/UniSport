@@ -99,7 +99,7 @@ foreach ($allFacilities as $f) {
       <div>
         <p>UniSport is a convenient online platform designed for UTeM students to easily reserve sports facilities and venues on campus. Browse availability, pick a date and a two-hour slot, and submit your reservation — admin will confirm it shortly after.</p>
       </div>
-      <div class="about-img"><img src="<?= base_url('assets/images/placeholder.svg') ?>" alt="About"></div>
+      <div class="about-img"><img src="<?= base_url('assets/images/about.jpg') ?>" alt="About"></div>
     </div>
   </section>
 </div>
