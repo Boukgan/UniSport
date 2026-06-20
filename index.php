@@ -11,7 +11,38 @@ if (current_user_role() === 'admin') {
 $pageTitle = 'Home';
 require __DIR__ . '/includes/header.php';
 
-$facilities = $conn->query('SELECT * FROM facilities ORDER BY facility_id ASC LIMIT 14')->fetch_all(MYSQLI_ASSOC);
+// No LIMIT — fetch all facilities so none are missing
+$allFacilities = $conn->query('SELECT * FROM facilities ORDER BY facility_id ASC')->fetch_all(MYSQLI_ASSOC);
+
+/**
+ * Same compute_card_status logic as dashboard.php so statuses stay in sync.
+ */
+function compute_card_status($conn, $fac) {
+    $fid     = (int)$fac['facility_id'];
+    $default = $fac['maintenance_status'];
+    $today   = date('Y-m-d');
+
+    $map = slot_status_map($conn, $fid, $today, $default, $fac['operating_hours']);
+
+    if (empty($map)) return $default;
+
+    $total       = count($map);
+    $available   = count(array_filter($map, fn($s) => $s === 'available'));
+    $maintenance = count(array_filter($map, fn($s) => $s === 'maintenance'));
+
+    if ($maintenance === $total) return 'maintenance';
+    if ($available === 0) return 'full';
+    if ($available < 3) return 'limited';
+
+    return in_array($default, ['available','limited']) ? $default : 'available';
+}
+
+// Attach computed status to each facility
+$facilities = [];
+foreach ($allFacilities as $f) {
+    $f['_card_status'] = compute_card_status($conn, $f);
+    $facilities[] = $f;
+}
 ?>
 <div class="page-wrap">
   <section class="hero">
@@ -44,9 +75,9 @@ $facilities = $conn->query('SELECT * FROM facilities ORDER BY facility_id ASC LI
     <div class="section-line"></div>
     <div class="facilities-grid">
       <?php foreach ($facilities as $f):
-        $status = $f['maintenance_status'];
+        $status   = $f['_card_status'];
         $disabled = in_array($status, ['full','maintenance']);
-        $href = $disabled ? '#' : base_url('booking.php?facility_id=' . $f['facility_id']);
+        $href     = $disabled ? '#' : base_url('booking.php?facility_id=' . $f['facility_id']);
       ?>
         <a class="fac-card <?= $disabled?'disabled':'' ?>" href="<?= e($href) ?>">
           <div class="fac-img">
