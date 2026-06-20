@@ -77,7 +77,12 @@ $darkPref = $_SESSION['dark_mode'] ?? 0;
         </div>
       </div>
       <div class="nav-user" onclick="toggleUserMenu(event)">
-        <div class="nav-avatar"><?= strtoupper(substr(current_user_name(),0,1)) ?></div>
+        <?php $__pic = current_user_picture(); ?>
+        <?php if ($__pic && file_exists(__DIR__ . '/../uploads/profile/' . $__pic)): ?>
+          <img class="nav-avatar" src="<?= e(profile_image_url($__pic)) ?>" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+        <?php else: ?>
+          <div class="nav-avatar"><?= strtoupper(substr(current_user_name(),0,1)) ?></div>
+        <?php endif; ?>
         <span class="nav-name"><?= e(current_user_name()) ?></span>
         <div class="user-dropdown" id="userDropdown">
           <?php if ($role !== 'admin'): ?>
