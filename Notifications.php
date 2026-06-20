@@ -64,7 +64,7 @@ require __DIR__ . '/includes/header.php';
               <form method="post" onsubmit="return confirm('Delete this notification?')">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="notification_id" value="<?= (int)$n['notification_id'] ?>">
-                <?= csrf_field() ?>
+                <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
                 <button class="btn btn-danger btn-sm">Delete</button>
               </form>
             </td>
