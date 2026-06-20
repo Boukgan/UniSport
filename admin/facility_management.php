@@ -42,7 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     exit;
                 }
                 $img = 'fac_' . time() . '_' . bin2hex(random_bytes(3)) . '.' . $ext;
-                move_uploaded_file($f['tmp_name'], __DIR__ . '/../uploads/facilities/' . $img);
+                $uploadDir = __DIR__ . '/../uploads/facilities/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                move_uploaded_file($f['tmp_name'], $uploadDir . $img);
             }
         }
 
