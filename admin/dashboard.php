@@ -15,7 +15,7 @@ require __DIR__.'/../includes/header.php';
 ?>
 <main class="page-wrap"><div class="container">
   <div class="page-header"><div><h1>Admin Dashboard</h1><p>Operational overview of UniSport.</p></div></div>
-  <?php require __DIR__.'/_tabs.php'; ?>
+  <?php require __DIR__.'/tabs.php'; ?>
   <div class="stats-row">
     <div class="stat-card"><div class="stat-icon">🏟️</div><div class="stat-label">Facilities</div><div class="stat-val"><?= (int)$total_fac ?></div></div>
     <div class="stat-card"><div class="stat-icon">👤</div><div class="stat-label">Users</div><div class="stat-val"><?= (int)$total_users ?></div></div>
