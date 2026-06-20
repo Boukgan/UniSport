@@ -15,6 +15,9 @@ function current_user_role() {
 function current_user_name() {
     return $_SESSION['full_name'] ?? 'Guest';
 }
+function current_user_picture() {
+    return $_SESSION['profile_picture'] ?? '';
+}
 
 function require_login() {
     if (!is_logged_in()) {
