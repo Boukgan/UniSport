@@ -37,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
                 }
                 $ext=strtolower(pathinfo($f['name'],PATHINFO_EXTENSION));
                 $pic='user_'.$uid.'_'.time().'.'.$ext;
-                move_uploaded_file($f['tmp_name'],__DIR__.'/uploads/profile/'.$pic);
+                $uploadDir = __DIR__.'/uploads/profile/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+                move_uploaded_file($f['tmp_name'], $uploadDir.$pic);
             }
         }
         if (!$err) {
