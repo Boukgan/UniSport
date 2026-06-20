@@ -30,7 +30,7 @@ require __DIR__.'/../includes/header.php';
 ?>
 <main class="page-wrap"><div class="container">
   <div class="page-header"><div><h1>Reservation Monitoring</h1><p>Search, filter and cancel reservations.</p></div></div>
-  <?php require __DIR__.'/_tabs.php'; ?>
+  <?php require __DIR__.'/tabs.php'; ?>
   <form class="filter-bar" method="get">
     <input type="search" name="q" value="<?= e($q) ?>" placeholder="Search user, email or facility…">
     <select name="status">
