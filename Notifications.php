@@ -5,15 +5,33 @@ require_non_admin();
 
 $uid = current_user_id();
 
-// Mark all as read when page is opened
-$conn->prepare('UPDATE notifications SET is_read=1 WHERE user_id=?')
-     ->bind_param('i', $uid) || null;
+// AJAX: mark a single notification read, or mark all read (used by the notification bell dropdown)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['api'])) {
+    csrf_verify();
+    $api = $_POST['api'];
+    if ($api === 'mark_read') {
+        $nid = (int)($_POST['id'] ?? 0);
+        $stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE notification_id=? AND user_id=?');
+        $stmt->bind_param('ii', $nid, $uid);
+        $stmt->execute();
+    } elseif ($api === 'mark_all') {
+        $stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE user_id=?');
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+    }
+    header('Content-Type: application/json');
+    echo json_encode(['ok' => true, 'unread' => unread_notification_count($conn, $uid)]);
+    exit;
+}
+
+// Mark all as read when the full notifications page is opened
 $stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE user_id=?');
 $stmt->bind_param('i', $uid);
 $stmt->execute();
 
 // Handle single delete
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'delete') {
+    csrf_verify();
     $nid = (int)$_POST['notification_id'];
     $stmt = $conn->prepare('DELETE FROM notifications WHERE notification_id=? AND user_id=?');
     $stmt->bind_param('ii', $nid, $uid);
