@@ -44,8 +44,7 @@ function render_row($r){
     echo '<td><a class="btn btn-outline btn-sm" href="'.base_url('reservation_summary.php?id='.$r['reservation_id']).'"
     >View</a> ';
     if($can_cancel) {
-        echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Cancel this
-    reservation?\')">';
+        echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Cancel this reservation?\\n\\nNote: You can only cancel before the scheduled session date. This action cannot be undone.\')">';
     echo '<input type="hidden" name="action" value="cancel"><input type="hidden"
     name="reservation_id" value="'.$r['reservation_id'].'">';
     echo '<button class="btn btn-danger btn-sm">Cancel</button></form>';
@@ -56,20 +55,6 @@ function render_row($r){
 <main class="page-wrap"><div class="container">
     <div class="page-header"><div><h1>My Reservations</h1><p>View, track and cancel your
         facility reservations.</p></div></div>
-
-        <!-- Cancellation Guidelines -->
-        <div style="background:var(--off);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:28px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-            <span style="font-size:18px">ℹ️</span>
-            <strong style="font-size:15px">Cancellation Guidelines</strong>
-          </div>
-          <ul style="margin:0;padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.9">
-            <li>You may cancel a reservation <strong>before</strong> the scheduled session date.</li>
-            <li>A confirmation prompt will appear — please review before confirming.</li>
-            <li>Once cancelled, you will receive a cancellation notification.</li>
-            <li>Past or completed reservations <strong>cannot</strong> be cancelled.</li>
-          </ul>
-        </div>
 
         <!-- Cancellation success modal -->
         <?php $__flashMsg = flash('success'); if ($__flashMsg && str_contains(strtolower($__flashMsg), 'cancel')): ?>
