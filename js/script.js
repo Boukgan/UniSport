@@ -28,9 +28,10 @@ document.addEventListener('click',(e)=>{
             const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             apply(next);
             // also persist server-side when logged in
+            const __csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
             fetch('profile.php', {
                 method: 'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
-                body:'action=dark_mode&dark_mode='+(next==='dark'?1:0)
+                body:'action=dark_mode&dark_mode='+(next==='dark'?1:0)+'&csrf_token='+encodeURIComponent(__csrf)
             }).catch(()=>{});
                });
             }

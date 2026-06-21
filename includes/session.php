@@ -81,6 +81,6 @@ function rate_limit($key, $maxAttempts = 5, $windowSeconds = 300) {
         return false;
     }
     $attempts[] = $now;
-    $_SESSION['rl'][$key] = array_values($attempts);
+    $_SESSION['_rl'][$key] = array_values($attempts);
     return true;
 }

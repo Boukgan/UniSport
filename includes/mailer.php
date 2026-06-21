@@ -69,7 +69,7 @@ function email_template($title, $bodyHTML) {
         </div>
         <div style="padding:24px 22px;color:#003b8e">
           <h2 style="margin:0 0 10px;font-size:20px;color:#003b8e">'.htmlspecialchars($title).'</h2>
-          <div style="font-size:14px;line-height:1.7;color:#1f2a44">'.$bodyHtml.'</div>
+          <div style="font-size:14px;line-height:1.7;color:#1f2a44">'.$bodyHTML.'</div>
         </div>
         <div style="padding:14px 22px;background:#f0f5ff;font-size:12px;color:#6b7fa3">UniSport · UTeM Sports Centre</div>
       </div>

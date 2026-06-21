@@ -24,10 +24,10 @@ function attempt_login($identifier, $password, $admin_only = false) {
     if ($is_email) {
         $role = role_from_email($id);
         if ($role === null) return [false, 'Only official UTeM email accounts are allowed.'];
-        $stmt = $conn->prepare('SELECT user_id, full_name, email, matric_number, password, role, profile_picture FROM users WHERE email=? LIMIT 1');
+        $stmt = $conn->prepare('SELECT user_id, full_name, email, matric_number, password, role, profile_picture, dark_mode FROM users WHERE email=? LIMIT 1');
         $stmt->bind_param('s', $id);
     }else {
-        $stmt = $conn->prepare('SELECT user_id, full_name, email, matric_number, password, role, profile_picture FROM users WHERE LOWER(matric_number)=? LIMIT 1');
+        $stmt = $conn->prepare('SELECT user_id, full_name, email, matric_number, password, role, profile_picture, dark_mode FROM users WHERE LOWER(matric_number)=? LIMIT 1');
         $stmt->bind_param('s', $id);
     }
     $stmt->execute();
