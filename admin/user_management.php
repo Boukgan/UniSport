@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'change_role') {
         $user_id  = (int)($_POST['user_id'] ?? 0);
         $new_role = $_POST['new_role'] ?? '';
-        $allowed  = ['user', 'staff'];
+        $allowed  = ['student', 'staff'];
         if ($user_id > 0 && in_array($new_role, $allowed, true)) {
             $stmt = $conn->prepare("UPDATE users SET role=? WHERE user_id=? AND role<>'admin'");
             $stmt->bind_param('si', $new_role, $user_id);
