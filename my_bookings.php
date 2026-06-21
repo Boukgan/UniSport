@@ -87,8 +87,7 @@ function render_row($r){
 
         <h2 class="section-title">Upcoming</h2><div class="section-line"></div>
         <?php if (!$upcoming): ?>
-            <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br><a
-            class="auth-link" href="<?= base_url('dashboard.php') ?>">Reserve a facility →</a></div>
+            <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br><a class="auth-link" href="<?= base_url('dashboard.php') ?>">Reserve a facility →</a></div>
             <?php else: ?>
                 <table class="data-table" style="margin-bottom:32px">
                     <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
