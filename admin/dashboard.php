@@ -97,7 +97,7 @@ require __DIR__ . '/../includes/header.php';
     <div><h1>Admin Dashboard</h1><p>Operational overview of UniSport.</p></div>
     <div><span class="btn btn-primary">Welcome, <?= e(current_user_name()) ?>!</span></div>
   </div>
-  <?php require __DIR__ . '/_tabs.php'; ?>
+  <?php require __DIR__ . '/tabs.php'; ?>
 
   <!-- Stat Cards -->
   <div class="stats-row">
