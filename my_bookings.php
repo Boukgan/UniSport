@@ -6,6 +6,7 @@ require_non_admin();
 $uid=current_user_id();
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='cancel') {
+    csrf_verify();
     $rid=(int)$_POST['reservation_id'];
     // can only cancel if not expired
     $stmt=$conn->prepare("UPDATE reservations SET reservation_status='Cancelled' WHERE 
@@ -18,14 +19,23 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='cancel') {
     header('Location: '.base_url('my_bookings.php')); exit;
 }
 
-$upcoming=$conn->query("SELECT r.*, f.facility_name FROM reservations r JOIN facilities f
-ON r.facility_id=f.facility_id WHERE r.user_id=$uid AND r.booking_date >= CURDATE() AND
-r.reservation_status IN ('Pending', 'Confirmed') ORDER BY r.booking_date,r.start_time")->
-fetch_all(MYSQLI_ASSOC);
-$past=$conn->query("SELECT r.*, f.facility_name FROM reservations r JOIN facilities f ON
-r.facility_id=f.facility_id WHERE r.user_id=$uid AND (r.booking_date < CURDATE() OR 
-r.reservation_status IN ('Cancelled', 'Completed')) ORDER BY r.booking_date DESC LIMIT
-50")->fetch_all(MYSQLI_ASSOC);
+$upcomingStmt = $conn->prepare(
+    "SELECT r.*, f.facility_name FROM reservations r JOIN facilities f
+     ON r.facility_id=f.facility_id WHERE r.user_id=? AND r.booking_date >= CURDATE() AND
+     r.reservation_status IN ('Pending', 'Confirmed') ORDER BY r.booking_date,r.start_time"
+);
+$upcomingStmt->bind_param('i', $uid);
+$upcomingStmt->execute();
+$upcoming = $upcomingStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+$pastStmt = $conn->prepare(
+    "SELECT r.*, f.facility_name FROM reservations r JOIN facilities f ON
+     r.facility_id=f.facility_id WHERE r.user_id=? AND (r.booking_date < CURDATE() OR 
+     r.reservation_status IN ('Cancelled', 'Completed')) ORDER BY r.booking_date DESC LIMIT 50"
+);
+$pastStmt->bind_param('i', $uid);
+$pastStmt->execute();
+$past = $pastStmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 $pageTitle='My Reservations';
 require __DIR__.'/includes/header.php';
@@ -46,6 +56,7 @@ function render_row($r){
     if($can_cancel) {
         echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Cancel this
     reservation?\')">';
+    echo '<input type="hidden" name="csrf_token" value="'.e(csrf_token()).'">';
     echo '<input type="hidden" name="action" value="cancel"><input type="hidden"
     name="reservation_id" value="'.$r['reservation_id'].'">';
     echo '<button class="btn btn-danger btn-sm">Cancel</button></form>';
@@ -59,7 +70,7 @@ function render_row($r){
 
         <h2 class="section-title">Upcoming</h2><div class="section-line"></div>
         <?php if (!$upcoming): ?>
-            <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br><a
+            <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br>
             class="auth-link" href="<?= base_url('dashboard.php') ?>">Reserve a facility →</a></div>
             <?php else: ?>
                 <table class="data-table" style="margin-bottom:32px">

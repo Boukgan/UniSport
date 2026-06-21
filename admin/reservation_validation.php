@@ -18,8 +18,8 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $stmt_r->execute();
             $r = $stmt_r->get_result()->fetch_assoc();
             $stmt_r->close();
-            $c=$conn->prepare("SELECT 1 FROM reservations WHERE facility_id=? AND booking_date=? AND start_time=? AND reservation_status='Confirmed' AND reservation_id<>?");
-            $c->bind_param('issi',$r['facility_id'],$r['booking_date'],$r['start_time'],$rid); $c->execute();
+            $c=$conn->prepare("SELECT 1 FROM reservations WHERE facility_id=? AND booking_date=? AND start_time < ? AND end_time > ? AND reservation_status='Confirmed' AND reservation_id<>?");
+            $c->bind_param('isssi',$r['facility_id'],$r['booking_date'],$r['end_time'],$r['start_time'],$rid); $c->execute();
             if ($c->get_result()->fetch_assoc()) { flash('error','Conflict: that slot is already confirmed.'); header('Location: '.base_url('admin/reservation_validation.php')); exit; }
         }
         $stmt=$conn->prepare('UPDATE reservations SET reservation_status=? WHERE reservation_id=?');

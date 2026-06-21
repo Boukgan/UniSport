@@ -6,10 +6,13 @@ $pageTitle='Reservation Monitoring';
 $extraCss=['admin.css','dashboard.css'];
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='cancel') {
+    csrf_verify();
     $rid=(int)$_POST['reservation_id'];
     $stmt=$conn->prepare("UPDATE reservations SET reservation_status='Cancelled' WHERE reservation_id=?");
     $stmt->bind_param('i',$rid); $stmt->execute();
-    $r=$conn->query("SELECT user_id FROM reservations WHERE reservation_id=$rid")->fetch_assoc();
+    $rStmt=$conn->prepare("SELECT user_id FROM reservations WHERE reservation_id=?");
+    $rStmt->bind_param('i',$rid); $rStmt->execute();
+    $r=$rStmt->get_result()->fetch_assoc();
     if ($r) notify($conn,$r['user_id'],'Reservation #'.$rid.' cancelled by admin.');
     flash('success','Reservation cancelled.');
     header('Location: '.base_url('admin/reservation_monitoring.php')); exit;
@@ -59,6 +62,7 @@ require __DIR__.'/../includes/header.php';
             <td>
               <?php if (in_array($r['reservation_status'],['Pending','Confirmed'])): ?>
                 <form method="post" style="display:inline" onsubmit="return confirm('Cancel this reservation?')">
+                  <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
                   <input type="hidden" name="action" value="cancel">
                   <input type="hidden" name="reservation_id" value="<?= (int)$r['reservation_id'] ?>">
                   <button class="btn btn-danger btn-sm">Cancel</button>
