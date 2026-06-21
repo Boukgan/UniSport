@@ -28,10 +28,9 @@ document.addEventListener('click',(e)=>{
             const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             apply(next);
             // also persist server-side when logged in
-            const __csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
             fetch('profile.php', {
                 method: 'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
-                body:'action=dark_mode&dark_mode='+(next==='dark'?1:0)+'&csrf_token='+encodeURIComponent(__csrf)
+                body:'action=dark_mode&dark_mode='+(next==='dark'?1:0)
             }).catch(()=>{});
                });
             }
@@ -56,10 +55,12 @@ document.addEventListener('click',(e)=>{
                 { badge.style.display='none'; }
             }
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+            const baseUrl = (document.querySelector('nav[data-base]')?.dataset.base || '').replace(/\/+$/, '');
+            const notifUrl = baseUrl + '/notifications.php';
             function markRead(id, el){
                 const fd = new URLSearchParams();
                 fd.append('api', 'mark_read'); fd.append('id', id); fd.append('csrf_token', csrfToken);
-                fetch('notifications.php', { method:'POST', body:fd})
+                fetch(notifUrl, { method:'POST', body:fd})
                 .then(r=>r.json()).then(j=>{ if(j.ok){ el?.classList.remove('unread');
                     el?.classList.add('read'); setUnread(j.unread); }});
                 }
@@ -71,7 +72,7 @@ document.addEventListener('click',(e)=>{
         markAll?.addEventListener('click',()=>{
             const fd = new URLSearchParams(); fd.append('api', 'mark_all');
             fd.append('csrf_token', csrfToken);
-            fetch('notifications.php', { method:'POST', body:fd})
+            fetch(notifUrl, { method:'POST', body:fd})
             .then(r=>r.json()).then(j=>{ if(j.ok){ list?.querySelectorAll('.notif-item.unread').forEach(el=>{ el.classList.remove('unread'); el.classList.add('read'); });
 setUnread(j.unread); }});
             });
