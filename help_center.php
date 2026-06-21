@@ -39,9 +39,9 @@ $facilities = $conn->query('SELECT facility_name FROM facilities ORDER BY facili
     <?php foreach ($facilities as $f): ?><li><?= e($f['facility_name']) ?></li><?php endforeach; ?>
   </ul></div>
   <div class="help-detail" id="h5"><h2>Need Further Help?</h2>
-    <p>Email: <a class="auth-link" href="mailto:unisport@utem.edu.my">unisport@utem.edu.my</a></p>
+    <p>Email: <a class="auth-link" href="mailto:unisportsupport@gmail.com">unisportsupport@gmail.com</a></p>
   </div>
-</div></main>
+</div></main>s
 <script>
 function openHelp(id){
   document.querySelectorAll('.help-detail').forEach(d=>d.classList.remove('open'));
