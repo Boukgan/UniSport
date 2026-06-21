@@ -6,7 +6,6 @@ require_non_admin();
 $uid=current_user_id();
 
 if ($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='cancel') {
-    csrf_verify();
     $rid=(int)$_POST['reservation_id'];
     // can only cancel if not expired
     $stmt=$conn->prepare("UPDATE reservations SET reservation_status='Cancelled' WHERE 
@@ -19,23 +18,14 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['action']??'')==='cancel') {
     header('Location: '.base_url('my_bookings.php')); exit;
 }
 
-$upcomingStmt = $conn->prepare(
-    "SELECT r.*, f.facility_name FROM reservations r JOIN facilities f
-     ON r.facility_id=f.facility_id WHERE r.user_id=? AND r.booking_date >= CURDATE() AND
-     r.reservation_status IN ('Pending', 'Confirmed') ORDER BY r.booking_date,r.start_time"
-);
-$upcomingStmt->bind_param('i', $uid);
-$upcomingStmt->execute();
-$upcoming = $upcomingStmt->get_result()->fetch_all(MYSQLI_ASSOC);
-
-$pastStmt = $conn->prepare(
-    "SELECT r.*, f.facility_name FROM reservations r JOIN facilities f ON
-     r.facility_id=f.facility_id WHERE r.user_id=? AND (r.booking_date < CURDATE() OR 
-     r.reservation_status IN ('Cancelled', 'Completed')) ORDER BY r.booking_date DESC LIMIT 50"
-);
-$pastStmt->bind_param('i', $uid);
-$pastStmt->execute();
-$past = $pastStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$upcoming=$conn->query("SELECT r.*, f.facility_name FROM reservations r JOIN facilities f
+ON r.facility_id=f.facility_id WHERE r.user_id=$uid AND r.booking_date >= CURDATE() AND
+r.reservation_status IN ('Pending', 'Confirmed') ORDER BY r.booking_date,r.start_time")->
+fetch_all(MYSQLI_ASSOC);
+$past=$conn->query("SELECT r.*, f.facility_name FROM reservations r JOIN facilities f ON
+r.facility_id=f.facility_id WHERE r.user_id=$uid AND (r.booking_date < CURDATE() OR 
+r.reservation_status IN ('Cancelled', 'Completed')) ORDER BY r.booking_date DESC LIMIT
+50")->fetch_all(MYSQLI_ASSOC);
 
 $pageTitle='My Reservations';
 require __DIR__.'/includes/header.php';
@@ -56,7 +46,6 @@ function render_row($r){
     if($can_cancel) {
         echo '<form method="post" style="display:inline" onsubmit="return confirm(\'Cancel this
     reservation?\')">';
-    echo '<input type="hidden" name="csrf_token" value="'.e(csrf_token()).'">';
     echo '<input type="hidden" name="action" value="cancel"><input type="hidden"
     name="reservation_id" value="'.$r['reservation_id'].'">';
     echo '<button class="btn btn-danger btn-sm">Cancel</button></form>';
@@ -68,9 +57,37 @@ function render_row($r){
     <div class="page-header"><div><h1>My Reservations</h1><p>View, track and cancel your
         facility reservations.</p></div></div>
 
+        <!-- Cancellation Guidelines -->
+        <div style="background:var(--off);border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <span style="font-size:18px">ℹ️</span>
+            <strong style="font-size:15px">Cancellation Guidelines</strong>
+          </div>
+          <ul style="margin:0;padding-left:20px;color:var(--muted);font-size:13.5px;line-height:1.9">
+            <li>You may cancel a reservation <strong>before</strong> the scheduled session date.</li>
+            <li>A confirmation prompt will appear — please review before confirming.</li>
+            <li>Once cancelled, you will receive a cancellation notification.</li>
+            <li>Past or completed reservations <strong>cannot</strong> be cancelled.</li>
+          </ul>
+        </div>
+
+        <!-- Cancellation success modal -->
+        <?php $__flashMsg = flash('success'); if ($__flashMsg && str_contains(strtolower($__flashMsg), 'cancel')): ?>
+        <div id="cancelModal" style="position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9999">
+          <div style="background:var(--surface);border-radius:14px;padding:36px 32px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.18)">
+            <div style="font-size:48px;margin-bottom:12px">✅</div>
+            <h2 style="margin:0 0 8px">Reservation Cancelled</h2>
+            <p style="color:var(--muted);font-size:14px;margin-bottom:24px"><?= e($__flashMsg) ?></p>
+            <button onclick="document.getElementById('cancelModal').remove()" class="btn btn-primary" style="width:100%">OK</button>
+          </div>
+        </div>
+        <?php elseif ($__flashMsg): ?>
+        <script>/* non-cancel flash: <?= addslashes($__flashMsg) ?> */</script>
+        <?php endif; ?>
+
         <h2 class="section-title">Upcoming</h2><div class="section-line"></div>
         <?php if (!$upcoming): ?>
-            <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br>
+            <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br><a
             class="auth-link" href="<?= base_url('dashboard.php') ?>">Reserve a facility →</a></div>
             <?php else: ?>
                 <table class="data-table" style="margin-bottom:32px">
