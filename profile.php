@@ -48,6 +48,17 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
             $_SESSION['full_name']=$name; $_SESSION['profile_picture']=$pic;
             flash('success','Profile updated.'); header('Location: '.base_url('profile.php')); exit;
         }
+    } elseif ($action==='remove_photo') {
+        $old = $u['profile_picture'];
+        if ($old) {
+            $oldPath = __DIR__ . '/uploads/profile/' . $old;
+            if (file_exists($oldPath)) unlink($oldPath);
+        }
+        $stmt = $conn->prepare('UPDATE users SET profile_picture=NULL WHERE user_id=?');
+        $stmt->bind_param('i', $uid); $stmt->execute();
+        $_SESSION['profile_picture'] = '';
+        flash('success', 'Profile photo removed.');
+        header('Location: ' . base_url('profile.php')); exit;
     } elseif ($action==='password') {
         $cur=$_POST['current_password']??''; $np=$_POST['new_password']??''; $cf=$_POST['confirm_password']??'';
         if (!password_verify($cur,$u['password']))        $err='Current password is incorrect.';
@@ -99,6 +110,13 @@ require __DIR__.'/includes/header.php';
         <div>
           <label class="btn btn-outline btn-sm" for="profileImage">Change photo</label>
           <input id="profileImage" type="file" name="profile_image" accept="image/*" style="display:none">
+          <?php if ($u['profile_picture']): ?>
+          <form method="post" style="display:inline;margin-left:8px" onsubmit="return confirm('Remove profile photo?')">
+            <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
+            <input type="hidden" name="action" value="remove_photo">
+            <button class="btn btn-danger btn-sm" type="submit">Remove photo</button>
+          </form>
+          <?php endif; ?>
           <div style="font-size:12px;color:var(--muted);margin-top:6px">JPG/PNG/GIF, max 2MB.</div>
         </div>
       </div>
