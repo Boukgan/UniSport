@@ -609,6 +609,10 @@ nav {
   color: #444;
 }
 
+html[data-theme="dark"] .about-section p {
+  color: #c9d6e8;
+}
+
 .about-img {
   height: 280px;
   border-radius: var(--card-r);
