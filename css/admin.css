@@ -96,3 +96,12 @@ html[data-theme="dark"] .slot-status-grid select {
   color: #e6edf7;
   border-color: #2a3a5a;
 }
+
+/* Chart legend dot */
+.legend-dot {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
