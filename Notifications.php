@@ -5,10 +5,29 @@ require_non_admin();
 
 $uid = current_user_id();
 
-// ── AJAX API handler (called by script.js from the header bell) ──
+// AJAX: mark a single notification read, or mark all read (used by the notification bell dropdown)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['api'])) {
     csrf_verify();
+    $api = $_POST['api'];
+    if ($api === 'mark_read') {
+        $nid = (int)($_POST['id'] ?? 0);
+        $stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE notification_id=? AND user_id=?');
+        $stmt->bind_param('ii', $nid, $uid);
+        $stmt->execute();
+    } elseif ($api === 'mark_all') {
+        $stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE user_id=?');
+        $stmt->bind_param('i', $uid);
+        $stmt->execute();
+    }
     header('Content-Type: application/json');
+    echo json_encode(['ok' => true, 'unread' => unread_notification_count($conn, $uid)]);
+    exit;
+}
+
+// Mark all as read when the full notifications page is opened
+$stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE user_id=?');
+$stmt->bind_param('i', $uid);
+$stmt->execute();
 
     if ($_POST['api'] === 'mark_all') {
         $stmt = $conn->prepare('UPDATE notifications SET is_read=1 WHERE user_id=?');
