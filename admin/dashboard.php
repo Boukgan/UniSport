@@ -15,7 +15,7 @@ $recent      = $conn->query("SELECT r.*, f.facility_name, u.full_name FROM reser
     JOIN users u ON r.user_id=u.user_id
     ORDER BY r.created_at DESC LIMIT 8")->fetch_all(MYSQLI_ASSOC);
 
-// ── Graph 1: Monthly Booking Trend (last 6 months) ──────────────────────────
+// ── Graph 1: Monthly Reservation Trend (last 6 months) ──────────────────────────
 // Meaningful: shows which months had high/low demand so admin can plan maintenance
 $monthlyRaw = $conn->query("
     SELECT DATE_FORMAT(booking_date,'%b %Y') AS month,
@@ -29,7 +29,7 @@ $monthlyRaw = $conn->query("
 $monthLabels = json_encode(array_column($monthlyRaw, 'month'));
 $monthData   = json_encode(array_column($monthlyRaw, 'total'));
 
-// ── Graph 2: Top 5 Most Booked Facilities ───────────────────────────────────
+// ── Graph 2: Top 5 Most Reserved  Facilities ───────────────────────────────────
 // Meaningful: reveals which facilities are in highest demand (confirmed+completed only)
 $topFacRaw = $conn->query("
     SELECT f.facility_name, COUNT(*) AS bookings
@@ -52,7 +52,7 @@ $statusRaw = $conn->query("
 $statusLabels = json_encode(array_column($statusRaw, 'status'));
 $statusData   = json_encode(array_column($statusRaw, 'total'));
 
-// ── Graph 4: Peak Booking Hours ──────────────────────────────────────────────
+// ── Graph 4: Peak Reservation Hours ──────────────────────────────────────────────
 // Meaningful: shows which time slots are most popular so admin can manage slot availability
 $peakRaw = $conn->query("
     SELECT HOUR(start_time) AS hr, COUNT(*) AS total
@@ -110,9 +110,9 @@ require __DIR__ . '/../includes/header.php';
   <!-- Charts Row 1 -->
   <div class="chart-grid" style="margin-top:28px">
 
-    <!-- Graph 1: Monthly Booking Trend -->
+    <!-- Graph 1: Monthly Reservation Trend -->
     <div class="chart-card">
-      <div class="chart-card-title">Monthly Booking Trend</div>
+      <div class="chart-card-title">Monthly Reservation Trend</div>
       <div class="chart-card-sub">Total reservations per month over the last 6 months</div>
       <div class="chart-wrap">
         <?php if (empty($monthlyRaw)): ?>
@@ -123,9 +123,9 @@ require __DIR__ . '/../includes/header.php';
       </div>
     </div>
 
-    <!-- Graph 2: Top 5 Most Booked Facilities -->
+    <!-- Graph 2: Top 5 Most Reserved Facilities -->
     <div class="chart-card">
-      <div class="chart-card-title">Top 5 Most Booked Facilities</div>
+      <div class="chart-card-title">Top 5 Most Reserved Facilities</div>
       <div class="chart-card-sub">Based on confirmed &amp; completed reservations</div>
       <div class="chart-wrap">
         <?php if (empty($topFacRaw)): ?>
@@ -150,9 +150,9 @@ require __DIR__ . '/../includes/header.php';
       <div class="chart-legend" id="statusLegend"></div>
     </div>
 
-    <!-- Graph 4: Peak Booking Hours -->
+    <!-- Graph 4: Peak Reservation Hours -->
     <div class="chart-card">
-      <div class="chart-card-title">Peak Booking Hours</div>
+      <div class="chart-card-title">Peak Reservation Hours</div>
       <div class="chart-card-sub">Which time slots are most in-demand (confirmed &amp; pending)</div>
       <div class="chart-wrap">
         <canvas id="peakChart"></canvas>
@@ -164,7 +164,7 @@ require __DIR__ . '/../includes/header.php';
   <!-- Graph 5: Facility Utilisation Rate -->
   <div class="chart-card" style="margin-top:20px">
     <div class="chart-card-title">Facility Utilisation Rate</div>
-    <div class="chart-card-sub">Share of confirmed &amp; completed bookings per facility — reveals which venues are underused</div>
+    <div class="chart-card-sub">Share of confirmed &amp; completed reservations per facility — reveals which venues are underused</div>
     <div class="chart-wrap" style="max-height:260px">
       <?php if (empty($utilRaw)): ?>
         <div class="chart-empty">No data yet.</div>
@@ -203,7 +203,7 @@ require __DIR__ . '/../includes/header.php';
 <script>
 const COLORS = ['#2563eb','#16a34a','#dc2626','#d97706','#7c3aed','#0891b2','#be185d','#15803d'];
 
-// Graph 1 – Monthly Booking Trend
+// Graph 1 – Monthly Reservation Trend
 <?php if (!empty($monthlyRaw)): ?>
 new Chart(document.getElementById('monthlyChart'), {
   type: 'line',
@@ -262,13 +262,13 @@ new Chart(document.getElementById('topFacChart'), {
 })();
 <?php endif; ?>
 
-// Graph 4 – Peak Booking Hours
+// Graph 4 – Peak Reservation Hours
 new Chart(document.getElementById('peakChart'), {
   type: 'bar',
   data: {
     labels: <?= $peakHoursJson ?>,
     datasets: [{
-      label: 'Bookings',
+      label: 'Reservations',
       data: <?= $peakValsJson ?>,
       backgroundColor: 'rgba(37,99,235,0.75)',
       borderRadius: 5
