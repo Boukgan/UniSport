@@ -41,7 +41,7 @@ $facilities = $conn->query('SELECT facility_name FROM facilities ORDER BY facili
   <div class="help-detail" id="h5"><h2>Need Further Help?</h2>
     <p>Email: <a class="auth-link" href="mailto:unisportsupport@gmail.com">unisportsupport@gmail.com</a></p>
   </div>
-</div></main>s
+</div></main>
 <script>
 function openHelp(id){
   document.querySelectorAll('.help-detail').forEach(d=>d.classList.remove('open'));

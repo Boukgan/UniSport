@@ -51,8 +51,8 @@ require __DIR__.'/../includes/header.php';
   <?php if (!$pending): ?>
     <div class="empty"><div class="empty-icon">✅</div>No pending reservations.</div>
   <?php else: ?>
-    <table class="data-table">
-      <thead><tr><th>ID</th><th>User</th><th>Facility</th><th>Date</th><th>Time</th><th>Actions</th></tr></thead>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>ID</th><th>User</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Actions</th></tr></thead>
       <tbody>
         <?php foreach ($pending as $r): ?>
           <tr>
@@ -61,6 +61,7 @@ require __DIR__.'/../includes/header.php';
             <td><?= e($r['facility_name']) ?></td>
             <td><?= e(fmt_date($r['booking_date'])) ?></td>
             <td><?= e(fmt_time($r['start_time'])) ?> – <?= e(fmt_time($r['end_time'])) ?></td>
+            <td><?= e(fmt_date($r['created_at'])) ?><br><small style="color:var(--muted)"><?= e(date('g:i A', strtotime($r['created_at']))) ?></small></td>
             <td>
               <form method="post" style="display:inline">
                 <input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>">
@@ -72,7 +73,7 @@ require __DIR__.'/../includes/header.php';
           </tr>
         <?php endforeach; ?>
       </tbody>
-    </table>
+    </table></div>
   <?php endif; ?>
 </div></main>
 <?php require __DIR__.'/../includes/footer.php'; ?>

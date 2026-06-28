@@ -477,7 +477,7 @@ require __DIR__ . '/../includes/header.php';
   <!-- ===================== FACILITIES TABLE ===================== -->
   <h2 class="section-title">All Facilities</h2>
   <div class="section-line"></div>
-  <table class="data-table" style="margin-bottom:32px">
+  <div class="data-table-wrap"><table class="data-table" style="margin-bottom:32px">
     <thead>
       <tr>
         <th>Name</th><th>Capacity</th><th>Operating Hours</th><th>Default Status</th><th>Actions</th>
@@ -503,7 +503,7 @@ require __DIR__ . '/../includes/header.php';
       </tr>
       <?php endforeach; ?>
     </tbody>
-  </table>
+  </table></div></div>
 <?php endif; ?>
 
 </div></main>

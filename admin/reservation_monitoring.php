@@ -48,8 +48,8 @@ require __DIR__.'/../includes/header.php';
   <?php if (!$rows): ?>
     <div class="empty">No reservations found.</div>
   <?php else: ?>
-    <table class="data-table">
-      <thead><tr><th>ID</th><th>User</th><th>Facility</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>ID</th><th>User</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
       <tbody>
         <?php foreach ($rows as $r): ?>
           <tr>
@@ -58,6 +58,7 @@ require __DIR__.'/../includes/header.php';
             <td><?= e($r['facility_name']) ?></td>
             <td><?= e(fmt_date($r['booking_date'])) ?></td>
             <td><?= e(fmt_time($r['start_time'])) ?> – <?= e(fmt_time($r['end_time'])) ?></td>
+            <td><?= e(fmt_date($r['created_at'])) ?><br><small style="color:var(--muted)"><?= e(date('g:i A', strtotime($r['created_at']))) ?></small></td>
             <td><span class="status-badge <?= status_class($r['reservation_status']) ?>"><?= e($r['reservation_status']) ?></span></td>
             <td>
               <?php if (in_array($r['reservation_status'],['Pending','Confirmed'])): ?>
@@ -72,7 +73,7 @@ require __DIR__.'/../includes/header.php';
           </tr>
         <?php endforeach; ?>
       </tbody>
-    </table>
+    </table></div>
   <?php endif; ?>
 </div></main>
 <?php require __DIR__.'/../includes/footer.php'; ?>

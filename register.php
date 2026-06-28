@@ -65,7 +65,8 @@ require __DIR__.'/includes/header.php';
                     <input type="text" name="phone" value="<?= e($_POST['phone']??'') ?>"></div>
                 <div class="form-row">
                     <label>Department (auto)</label>
-                    <input type="text" id="deptPreview" disabled placeholder="Auto from matric"></div>
+                    <input type="text" id="deptPreview" disabled placeholder="Auto from matric">
+                </div>
                 <div class="form-row"></div>
                 <div class="form-row">
                     <label>Password</label>

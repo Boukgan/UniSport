@@ -40,7 +40,7 @@ require __DIR__ . '/../includes/header.php';
   <?php if (!$users): ?>
     <div class="empty"><div class="empty-icon">👤</div>No registered users yet.</div>
   <?php else: ?>
-    <table class="data-table">
+    <div class="data-table-wrap"><table class="data-table">
       <thead>
         <tr>
           <th>ID</th>
@@ -82,7 +82,7 @@ require __DIR__ . '/../includes/header.php';
           </tr>
         <?php endforeach; ?>
       </tbody>
-    </table>
+    </table></div>
   <?php endif; ?>
 </div></main>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
