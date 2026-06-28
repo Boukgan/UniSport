@@ -42,7 +42,7 @@ e(fmt_date($res['booking_date'])) ?></td></tr>
 <tr><td style="padding:6px 0;color:var(--muted)">Time</td><td><?=
 e(fmt_time($res['start_time'])) ?> - <?= e(fmt_time($res['end_time'])) ?></td></tr>
 <tr><td style="padding:6px 0;color:var(--muted)">Submitted</td><td><?=
-e(fmt_date($res['created_at'])) ?></td></tr>
+e(fmt_date($res['created_at'])) ?> at <?= e(date('g:i A', strtotime($res['created_at']))) ?></td></tr>
 </table>
 <div style="display:flex;gap:10px;margin-top:18px">
 <a class="btn btn-primary" href="<?= base_url('my_bookings.php') ?>">My

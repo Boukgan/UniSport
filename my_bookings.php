@@ -39,6 +39,7 @@ function render_row($r){
     echo '<td>'.e($r['facility_name']).'</td>';
     echo '<td>'.e(fmt_date($r['booking_date'])).'</td>';
     echo '<td>'.e(fmt_time($r['start_time'])).' – '.e(fmt_time($r['end_time'])).'</td>';
+    echo '<td>'.e(fmt_date($r['created_at'])).'<br><small style="color:var(--muted)">'.e(date('g:i A', strtotime($r['created_at']))).'</small></td>';
     echo '<td><span class="status-badge
     '.status_class($r['reservation_status']).'">'.e($r['reservation_status']).'</span></td>';
     echo '<td><a class="btn btn-outline btn-sm" href="'.base_url('reservation_summary.php?id='.$r['reservation_id']).'"
@@ -75,7 +76,7 @@ function render_row($r){
             <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br><a class="auth-link" href="<?= base_url('dashboard.php') ?>">Reserve a facility →</a></div>
             <?php else: ?>
                 <table class="data-table" style="margin-bottom:32px">
-                    <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
                         <?php foreach ($upcoming as $r) render_row($r); ?>
                     </tbody>
@@ -87,7 +88,7 @@ function render_row($r){
             <div class="empty">No past reservations yet.</div>
             <?php else: ?>
                 <table class="data-table">
-                    <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+                    <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
                         <?php foreach ($past as $r) render_row($r); ?>
                     </tbody>
