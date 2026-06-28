@@ -48,7 +48,7 @@ require __DIR__.'/../includes/header.php';
   <?php if (!$rows): ?>
     <div class="empty">No reservations found.</div>
   <?php else: ?>
-    <table class="data-table">
+    <div class="data-table-wrap"><table class="data-table">
       <thead><tr><th>ID</th><th>User</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
       <tbody>
         <?php foreach ($rows as $r): ?>
@@ -73,7 +73,7 @@ require __DIR__.'/../includes/header.php';
           </tr>
         <?php endforeach; ?>
       </tbody>
-    </table>
+    </table></div>
   <?php endif; ?>
 </div></main>
 <?php require __DIR__.'/../includes/footer.php'; ?>

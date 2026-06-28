@@ -75,24 +75,24 @@ function render_row($r){
         <?php if (!$upcoming): ?>
             <div class="empty"><div class="empty-icon">📅</div>No upcoming reservations.<br><a class="auth-link" href="<?= base_url('dashboard.php') ?>">Reserve a facility →</a></div>
             <?php else: ?>
-                <table class="data-table" style="margin-bottom:32px">
+                <div class="data-table-wrap"><table class="data-table" style="margin-bottom:32px">
                     <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
                         <?php foreach ($upcoming as $r) render_row($r); ?>
                     </tbody>
-                </table>
+                </table></div>
         <?php endif; ?>
 
         <h2 class="section-title">Past & Cancelled</h2><div class="section-line"></div>
         <?php if (!$past): ?>
             <div class="empty">No past reservations yet.</div>
             <?php else: ?>
-                <table class="data-table">
+                <div class="data-table-wrap"><table class="data-table">
                     <thead><tr><th>ID</th><th>Facility</th><th>Date</th><th>Time</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
                         <?php foreach ($past as $r) render_row($r); ?>
                     </tbody>
-            </table>
+            </table></div>
                     <?php endif; ?>
             </div></main>
 <?php require __DIR__.'/includes/footer.php'; ?>

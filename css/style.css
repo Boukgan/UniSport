@@ -32,6 +32,7 @@
 
 html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 html {
@@ -112,6 +113,9 @@ nav {
   position: sticky;
   top: 0;
   z-index: 200;
+  width: 100%;
+  box-sizing: border-box;
+  left: 0;
 }
 
 .nav-logo {
@@ -297,10 +301,10 @@ nav {
 }
 
 .notif-dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 340px;
+  position: fixed;
+  top: 60px;
+  right: 12px;
+  width: min(340px, calc(100vw - 24px));
   max-height: 420px;
   overflow: auto;
   background: var(--white);
@@ -1056,8 +1060,16 @@ html[data-theme="dark"] .about-section p {
 /* ==========================================================================
    11. DATA TABLES & SYSTEM DASHBOARD CONTENT
    ========================================================================== */
+.data-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--card-r);
+}
+
 .data-table {
   width: 100%;
+  min-width: 560px;
   border-collapse: collapse;
   background: var(--white);
   border: 1px solid var(--border);
@@ -1672,6 +1684,8 @@ html[data-theme="dark"] .about-section p {
    15. SITE FOOTER
    ========================================================================== */
 .site-footer {
+  width: 100%;
+  box-sizing: border-box;
   background: var(--navy);
   color: var(--white);
   margin-top: 48px;
@@ -2091,4 +2105,106 @@ html[data-theme="dark"] .fmgmt-hours-preview {
 html[data-theme="dark"] .fmgmt-date-row {
   background: #101827 !important;
   border-color: #2a3a5a !important;
+}
+
+
+/* ==========================================================================
+   JS FORM VALIDATION — Inline error styles
+   ========================================================================== */
+
+.field-error {
+  display: block;
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+input.input-error,
+select.input-error,
+textarea.input-error {
+  border-color: #ef4444 !important;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(239,68,68,0.15);
+}
+
+/* ==========================================================================
+   RESPONSIVE — Mobile breakpoints (tablet + phone)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Nav */
+  nav { padding: 0 12px; height: auto; flex-wrap: wrap; gap: 8px; }
+  .nav-left { flex-wrap: wrap; gap: 6px; }
+  .nav-right { gap: 6px; }
+  .nav-btn { padding: 5px 12px; font-size: 12px; }
+
+  /* Page containers */
+  .container { padding: 20px 14px; }
+  .page-wrap { padding-bottom: 32px; }
+
+  /* Booking detail columns */
+  .detail-cols { grid-template-columns: 1fr; gap: 16px; }
+  aside { order: -1; } /* Show booking card above image on mobile */
+
+  /* Booking card */
+  .booking-card { padding: 18px; }
+  .cal-grid { gap: 2px; }
+  .slot-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+  /* Facility cards grid */
+  .facilities-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+
+  /* Tables — horizontal scroll */
+  .data-table-wrap, .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .data-table { min-width: 600px; }
+
+  /* Feature pills wrap */
+  .feature-pills { flex-wrap: wrap; gap: 6px; }
+
+  /* Page header */
+  .page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .page-header h1 { font-size: 22px; }
+
+  /* Auth cards */
+  .auth-card { padding: 24px 18px; border-radius: 18px; }
+
+  /* Footer */
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+}
+
+@media (max-width: 480px) {
+  /* Single column facility grid on phones */
+  .facilities-grid { grid-template-columns: 1fr; }
+
+  /* Hero */
+  .hero { padding: 24px 14px 0; }
+  .find-big { font-size: 22px; line-height: 1.3; }
+  .find-title { font-size: 13px; }
+  .search-bar { flex-direction: column; gap: 8px; }
+  .search-bar input, .search-bar button { width: 100%; border-radius: 8px; }
+
+  /* Slots */
+  .slot-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Stat cards */
+  .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { padding: 14px; }
+  .stat-val { font-size: 24px; }
+
+  /* Footer single col */
+  .footer-inner { grid-template-columns: 1fr; }
+
+  /* Filter bar */
+  .filter-bar { flex-direction: column; gap: 8px; }
+  .filter-bar input, .filter-bar select, .filter-bar button { width: 100%; }
+
+  /* Form grids */
+  .form-grid-2 { grid-template-columns: 1fr; }
+
+  /* Buttons full-width on small screens */
+  .btn-block-sm { display: block; width: 100%; text-align: center; }
+
+  /* Nav text hidden — show only icons */
+  .nav-logo span { font-size: 14px; }
 }
