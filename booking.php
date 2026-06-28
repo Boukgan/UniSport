@@ -40,7 +40,20 @@ if ($_SERVER['REQUEST_METHOD']==='POST') {
     $sh = (int)substr($start,0,2); $eh = (int)substr($end,0,2);
     $hours = $eh - $sh;
 
-    if ($date < date('Y-m-d')) {
+    // Daily reservation limit check
+    $limit_stmt = $conn->prepare(
+        "SELECT COUNT(*) AS cnt FROM reservations
+         WHERE user_id=? AND booking_date=?
+         AND reservation_status IN ('Pending','Confirmed')"
+    );
+    $limit_stmt->bind_param('is', $uid, $date);
+    $limit_stmt->execute();
+    $daily_count = (int)$limit_stmt->get_result()->fetch_assoc()['cnt'];
+    $limit_stmt->close();
+
+    if ($daily_count >= 2) {
+        flash('error', 'You have reached the maximum of 2 reservations per day for this date.');
+    } elseif ($date < date('Y-m-d')) {
         flash('error','please select today or a future date. ');
     } elseif ($date === date('Y-m-d') && $start <= date('H:i:s')) {
         flash('error','That time slot has already passed. Please select a future time. ');
